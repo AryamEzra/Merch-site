@@ -3,20 +3,20 @@ import Link from "next/link";
 
 const columns = [
   {
-    title: "Featured",
-    links: ["Air Force 1", "Huarache", "Air Max 90", "Air Max 95"],
+    title: "T-shirts",
+    links: ["Graphic Tees", "Logo Tees", "Limited Edition", "All T-shirts"],
   },
   {
-    title: "Shoes",
-    links: ["All Shoes", "Custom Shoes", "Jordan Shoes", "Running Shoes"],
+    title: "Accessories",
+    links: ["Hats", "Keychains", "Stickers", "Pins"],
   },
   {
-    title: "Clothing",
-    links: ["All Clothing", "Modest Wear", "Hoodies & Pullovers", "Shirts & Tops"],
+    title: "Collections",
+    links: ["Summer Collection", "Winter Collection", "Best Sellers", "All Collections"],
   },
   {
-    title: "Kids'",
-    links: ["Infant & Toddler Shoes", "Kids' Shoes", "Kids' Jordan Shoes", "Kids' Basketball Shoes"],
+    title: "Contact",
+    links: ["Customer Support", "FAQ", "Email Us", "Live Chat"],
   },
 ] as const;
 

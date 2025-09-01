@@ -36,9 +36,10 @@ async function seed() {
     log('Seeding filters: genders, colors, sizes');
 
     const genderRows = [
-      insertGenderSchema.parse({ label: 'Men', slug: 'men' }),
-      insertGenderSchema.parse({ label: 'Women', slug: 'women' }),
-      insertGenderSchema.parse({ label: 'Unisex', slug: 'unisex' }),
+  insertGenderSchema.parse({ label: 'T-shirts', slug: 'tshirts' }),
+  insertGenderSchema.parse({ label: 'Accessories', slug: 'accessories' }),
+  insertGenderSchema.parse({ label: 'Hats', slug: 'hats' }),
+  insertGenderSchema.parse({ label: 'Keychains', slug: 'keychains' }),
     ];
     for (const row of genderRows) {
       const exists = await db.select().from(genders).where(eq(genders.slug, row.slug)).limit(1);

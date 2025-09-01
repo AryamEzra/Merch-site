@@ -8,8 +8,10 @@ import { Bell, Home } from "lucide-react";
 import { ShoppingCartIcon } from "./ShoppingCartIcon";
 
 const NAV_LINKS = [
-  { label: "T-shirts", href: "/tshirts" },
-  { label: "Accessories", href: "/accessories" },
+  { label: "T-shirts", href: "/products?category=tshirts" },
+  { label: "Accessories", href: "/products?category=accessories" },
+  { label: "Hats", href: "/products?category=hats" },
+  { label: "Keychains", href: "/products?category=keychains" },
   { label: "Collections", href: "/collections" },
   { label: "Contact", href: "/contact" },
 ] as const;
@@ -48,7 +50,7 @@ export default function Navbar() {
           </Link>
           <Bell className="w-5 h-5 text-gray-600" />
           <ShoppingCartIcon />
-          <Link href="/login" className="text-body hover:underline">
+          <Link href="/sign-in" className="text-body hover:underline">
             Sign in
           </Link>
         </div>
@@ -88,7 +90,7 @@ export default function Navbar() {
           <li className="flex items-center justify-between pt-2">
             <SearchBar />
             <ShoppingCartIcon />
-            <Link href="/login" onClick={() => setOpen(false)}>
+            <Link href="/sign-in" onClick={() => setOpen(false)}>
               Sign in
             </Link>
           </li>
