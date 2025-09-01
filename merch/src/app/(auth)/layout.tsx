@@ -11,7 +11,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         </div>
 
         <div className="space-y-4">
-          <h2 className="text-heading-2">Just Do It</h2>
+          <h2 className="text-heading-2">Own Your Auth</h2>
           <p className="max-w-md text-lead text-light-300">
             Join thousands of creators and fans who trust Better Auth Merch Website for exclusive merchandise and secure shopping.
           </p>

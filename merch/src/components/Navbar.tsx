@@ -3,11 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import SearchBar from "./SearchBar";
+import { Bell, Home } from "lucide-react";
+import { ShoppingCartIcon } from "./ShoppingCartIcon";
 
 const NAV_LINKS = [
-  { label: "Men", href: "/products?gender=men" },
-  { label: "Women", href: "/products?gender=women" },
-  { label: "Kids", href: "/products?gender=unisex" },
+  { label: "T-shirts", href: "/tshirts" },
+  { label: "Accessories", href: "/accessories" },
   { label: "Collections", href: "/collections" },
   { label: "Contact", href: "/contact" },
 ] as const;
@@ -21,8 +23,8 @@ export default function Navbar() {
         className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8"
         aria-label="Primary"
       >
-  <Link href="/" aria-label="Better Auth Merch Website Home" className="flex items-center">
-          <Image src="/logo.svg" alt="Better Auth Merch Website" width={28} height={28} priority className="invert" />
+        <Link href="/" aria-label="Better Auth Home" className="flex items-center">
+          <Image src="/logo.svg" alt="Better Auth" width={28} height={28} priority className="invert" />
         </Link>
 
         <ul className="hidden items-center gap-8 md:flex">
@@ -38,15 +40,20 @@ export default function Navbar() {
           ))}
         </ul>
 
-        <div className="hidden items-center gap-6 md:flex">
-          <button className="text-body text-dark-900 transition-colors hover:text-dark-700">
-            Search
-          </button>
-          <button className="text-body text-dark-900 transition-colors hover:text-dark-700">
-            My Cart (2)
-          </button>
+        {/* RIGHT: Search, Icons, Sign In */}
+        <div className="hidden md:flex items-center gap-6">
+          <SearchBar />
+          <Link href="/">
+            <Home className="w-5 h-5 text-gray-600" />
+          </Link>
+          <Bell className="w-5 h-5 text-gray-600" />
+          <ShoppingCartIcon />
+          <Link href="/login" className="text-body hover:underline">
+            Sign in
+          </Link>
         </div>
 
+        {/* MOBILE MENU BUTTON */}
         <button
           type="button"
           className="inline-flex items-center justify-center rounded-md p-2 md:hidden"
@@ -61,6 +68,7 @@ export default function Navbar() {
         </button>
       </nav>
 
+      {/* MOBILE MENU */}
       <div
         id="mobile-menu"
         className={`border-t border-light-300 md:hidden ${open ? "block" : "hidden"}`}
@@ -78,8 +86,11 @@ export default function Navbar() {
             </li>
           ))}
           <li className="flex items-center justify-between pt-2">
-            <button className="text-body">Search</button>
-            <button className="text-body">My Cart (2)</button>
+            <SearchBar />
+            <ShoppingCartIcon />
+            <Link href="/login" onClick={() => setOpen(false)}>
+              Sign in
+            </Link>
           </li>
         </ul>
       </div>
