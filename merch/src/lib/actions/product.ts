@@ -27,6 +27,12 @@ import {
 
 import { NormalizedProductFilters } from "@/lib/utils/query";
 
+// Basic UUID v1-v5 validator to guard DB queries from invalid IDs
+function isUuid(v: string | undefined | null): v is string {
+  if (!v) return false;
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(v);
+}
+
 type ProductListItem = {
   id: string;
   name: string;
@@ -225,6 +231,8 @@ export type FullProduct = {
 };
 
 export async function getProduct(productId: string): Promise<FullProduct | null> {
+  // Guard against non-UUID IDs to prevent Postgres invalid input syntax errors
+  if (!isUuid(productId)) return null;
   const rows = await db
     .select({
       productId: products.id,
@@ -399,6 +407,7 @@ export type RecommendedProduct = {
 };
 
 export async function getProductReviews(productId: string): Promise<Review[]> {
+  if (!isUuid(productId)) return [];
   const rows = await db
     .select({
       id: reviews.id,
@@ -425,6 +434,7 @@ export async function getProductReviews(productId: string): Promise<Review[]> {
 }
 
 export async function getRecommendedProducts(productId: string): Promise<RecommendedProduct[]> {
+  if (!isUuid(productId)) return [];
   const base = await db
     .select({
       id: products.id,
