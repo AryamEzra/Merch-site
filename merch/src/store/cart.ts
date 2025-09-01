@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { createJSONStorage, persist } from 'zustand/middleware';
 
 interface CartItem {
   id: string;
@@ -19,54 +19,63 @@ interface CartState {
   getItemCount: () => number;
 }
 
-export const useCartStore = create<CartState>()(
+import { CartStoreActionsType, CartStoreStateType } from "@/types";
+
+export const useCartStore = create<CartStoreStateType & CartStoreActionsType>()(
   persist(
-    (set, get) => ({
-      items: [],
-      total: 0,
-      addItem: (item) => {
-        const items = get().items;
-        const existingItem = items.find((i) => i.id === item.id);
-        
-        if (existingItem) {
-          set({
-            items: items.map((i) =>
-              i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
-            ),
-          });
-        } else {
-          set({
-            items: [...items, { ...item, quantity: 1 }],
-          });
-        }
-        
-        // Update total
-        const newItems = get().items;
-        const total = newItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-        set({ total });
-      },
-      removeItem: (id) => {
-        const items = get().items.filter((item) => item.id !== id);
-        const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-        set({ items, total });
-      },
-      updateQuantity: (id, quantity) => {
-        if (quantity <= 0) {
-          get().removeItem(id);
-          return;
-        }
-        
-        const items = get().items.map((item) =>
-          item.id === id ? { ...item, quantity } : item
-        );
-        const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-        set({ items, total });
-      },
-      clearCart: () => set({ items: [], total: 0 }),
-      getItemCount: () => get().items.reduce((sum, item) => sum + item.quantity, 0),
+    (set) => ({
+      cart: [],
+      hasHydrated: false,
+      addToCart: (product) =>
+        set((state) => {
+          const existingIndex = state.cart.findIndex(
+            (p) =>
+              p.id === product.id &&
+              p.selectedSize === product.selectedSize &&
+              p.selectedColor === product.selectedColor
+          );
+
+          if (existingIndex !== -1) {
+            const updatedCart = [...state.cart];
+            updatedCart[existingIndex].quantity += product.quantity || 1;
+            return { cart: updatedCart };
+          }
+
+          return {
+            cart: [
+              ...state.cart,
+              {
+                ...product,
+                quantity: product.quantity || 1,
+                selectedSize: product.selectedSize,
+                selectedColor: product.selectedColor,
+              },
+            ],
+          };
+        }),
+      removeFromCart: (product) =>
+        set((state) => ({
+          cart: state.cart.filter(
+            (p) =>
+              !(
+                p.id === product.id &&
+                p.selectedSize === product.selectedSize &&
+                p.selectedColor === product.selectedColor
+              )
+          ),
+        })),
+      clearCart: () => set({ cart: [] }),
     }),
     {
-      name: 'cart-storage',
+      name: "cart",
+      storage: createJSONStorage(() => localStorage),
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          state.hasHydrated = true;
+        }
+      },
     }
   )
 );
+
+export default useCartStore;
